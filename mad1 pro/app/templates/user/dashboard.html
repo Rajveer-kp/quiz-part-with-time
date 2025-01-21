@@ -1,0 +1,161 @@
+<!-- user/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Menu Styles */
+        .menu-bar {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .menu-bar a {
+            text-decoration: none;
+            color: white;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .menu-bar a:hover {
+            color: #FFD700;
+        }
+
+        .menu-bar .welcome {
+            font-size: 16px;
+        }
+
+        /* Container Styles */
+        .container {
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #007BFF;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            .menu-bar {
+                flex-wrap: wrap;
+                text-align: center;
+            }
+
+            .menu-bar a {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- User Menu -->
+    <div class="menu-bar">
+        <div>
+            <a href="/user/dashboard">Home</a>
+            <a href="/user/scores">Scores</a>
+            <a href="/user/summary">Summary</a>
+            <a href="/logout">Logout</a>
+        </div>
+        <div class="welcome">
+            Welcome, {{ current_user.username }}
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="container">
+        <h1>Welcome, {{ current_user.username }}</h1>
+
+        <h2>Available Subjects and Chapters</h2>
+
+        {% if subjects %}
+            {% for subject in subjects %}
+                <h3>{{ subject.name }}</h3>
+                {% if subject.chapters %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Chapter Name</th>
+                                <th>Description</th>
+                                <th>No. of Questions</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for chapter in subject.chapters %}
+                                <tr>
+                                    <td>{{ chapter.title }}</td>
+                                    <td>{{ chapter.description }}</td>
+                                    <td>{{ chapter.question_count }}</td>
+                                    <td>
+                                        <a href="/user/take_quiz/{{ chapter.id }}" style="color: #007BFF; text-decoration: none;">Take Quiz</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="no-data">No chapters available for this subject.</p>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p class="no-data">No subjects available at the moment.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
